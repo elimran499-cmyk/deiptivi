@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Deiptivi">
+  <rect width="64" height="64" rx="14" fill="#FF0055"/>
+  <!-- "D" drawn as a path so it renders identically without a web font. -->
+  <path
+    fill="#0B0C10"
+    fill-rule="evenodd"
+    d="M14 12h16a20 20 0 0 1 0 40H14zM24 22h6a10 10 0 0 1 0 20h-6z"
+  />
+</svg>
