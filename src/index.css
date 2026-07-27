@@ -1,0 +1,265 @@
+@import "tailwindcss";
+
+/*
+  Brand palette.
+
+    Primary accent    Bright Sunset Orange  #FF5E00   buy buttons, featured banners
+    Secondary accent  Hot Pink Glow         #FF0055   secondary CTAs, hover, pricing accents
+    Highlight accent  Electric Violet       #7A04EB   gradient overlays, glowing borders
+    Background        Jet Charcoal          #0B0C10   dark interface backdrop
+    Card / surface    Surface Gray          #1F2833   modals, cards, table headers
+
+  The app is written against Tailwind's slate/amber/cyan/indigo scales, so the
+  roles are bound to those tokens and every component picks them up:
+    amber  → Bright Sunset Orange   cyan → Hot Pink Glow   indigo/purple → Electric Violet
+
+  Read the slate scale as "surface depth": high numbers are the dark surfaces,
+  low numbers are the light type sitting on them.
+
+  Measured contrast on the page background (#0B0C10):
+    white           18.8:1
+    body copy        7.6:1
+    Sunset Orange    6.4:1
+    Hot Pink         5.0:1
+  Electric Violet is 2.8:1, so it is used only for gradients, borders and glow —
+  never for text — exactly as the spec assigns it.
+*/
+@theme {
+  /* Display face for every title, subtitle and kicker */
+  --font-display: "Outfit", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  /* Kept as an alias so any lingering `font-serif` picks up the display face
+     rather than falling back to Georgia. */
+  --font-serif: "Outfit", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Surfaces */
+  --color-slate-950: #0b0c10; /* page background — Jet Charcoal */
+  --color-slate-900: #1f2833; /* cards, modals, containers — Surface Gray */
+  --color-slate-850: #2a3542; /* hover surface (custom step used by the app) */
+  --color-slate-800: #3a4757; /* borders & dividers */
+  --color-slate-700: #4a5766;
+  --color-slate-600: #667283;
+
+  /* Type */
+  --color-slate-500: #808b99; /* smallest labels */
+  --color-slate-400: #94a3b8; /* body copy and descriptions */
+  --color-slate-300: #c9d1da;
+  --color-slate-200: #e5e9ee;
+  --color-slate-100: #f8fafc; /* headings */
+  --color-slate-50: #f8fafc;
+
+  /* Primary accent — Bright Sunset Orange */
+  --color-amber-300: #ff8534;
+  --color-amber-400: #ff5e00;
+  --color-amber-500: #e04f00;
+
+  /* Secondary accent — Hot Pink Glow */
+  --color-cyan-300: #ff4d85;
+  --color-cyan-400: #ff0055;
+  --color-cyan-500: #e00049;
+
+  /* Highlight accent — Electric Violet */
+  --color-indigo-300: #b98cf7;
+  --color-indigo-400: #9d5ff2;
+  --color-indigo-500: #7a04eb;
+  --color-indigo-600: #6503c4;
+  --color-indigo-800: #45027f;
+  --color-indigo-950: #0b0c10; /* deepest — scrims and text on light buttons */
+  --color-purple-500: #9d5ff2;
+  --color-purple-600: #7a04eb;
+
+  /* Status */
+  --color-emerald-300: #6ee7b7;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+}
+
+
+html,
+body {
+  background-color: var(--color-slate-950);
+}
+
+/*
+  Titles and subtitles run in Outfit. Headings are covered by the element
+  selectors; the small uppercase kickers above each section are <p>, so they
+  opt in with `.kicker` — both land on the same display face.
+*/
+h1,
+h2,
+h3,
+h4,
+summary,
+.kicker {
+  font-family: var(--font-display);
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.02em;
+}
+
+/*
+  Light mode. The dark values above are the defaults; adding `.light` to <html>
+  re-points the same tokens at a white surface set, so every component follows
+  without touching its markup. Accents are darkened a step so they still clear
+  AA against white.
+*/
+html.light {
+  --color-slate-950: #ffffff; /* page background */
+  --color-slate-900: #f5f6f8; /* cards, modals, containers */
+  --color-slate-850: #eceef2; /* hover surface */
+  --color-slate-800: #dde1e7; /* borders & dividers */
+  --color-slate-700: #c8cdd6;
+  --color-slate-600: #9aa1ad;
+
+  --color-slate-500: #6b7280; /* smallest labels */
+  --color-slate-400: #4b5563; /* body copy — 7.6:1 on white */
+  --color-slate-300: #374151;
+  --color-slate-200: #1f2937;
+  --color-slate-100: #0b0c10; /* headings */
+  --color-slate-50: #0b0c10;
+
+  --color-amber-300: #ff7a2e;
+  --color-amber-400: #d24f00;
+  --color-amber-500: #b34400;
+
+  --color-cyan-300: #ff3d78;
+  --color-cyan-400: #d6004a;
+  --color-cyan-500: #b8003f;
+}
+
+/* The blueprint grid is a light wash on dark; invert it for the white surface. */
+html.light .bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(11, 12, 16, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 12, 16, 0.06) 1px, transparent 1px);
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: #eceef2;
+}
+
+
+@layer utilities {
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideLeft {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.25s ease-out forwards;
+  }
+
+  .animate-slideLeft {
+    animation: slideLeft 0.25s ease-out forwards;
+  }
+
+  /* Continuous logo-wall scroll, as in the reference. */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .animate-marquee {
+    animation: marquee 45s linear infinite;
+  }
+
+  /* Same loop, paced for a longer row (the film posters). */
+  .animate-marquee-slow {
+    animation: marquee 120s linear infinite;
+  }
+
+  /* Runs the same keyframes backwards, so the row travels the other way. */
+  .animate-marquee-reverse {
+    animation-direction: reverse;
+  }
+
+  /* Offscreen rows stop animating; see usePauseOffscreen. */
+  [data-paused='true'] .animate-marquee,
+  [data-paused='true'] .animate-marquee-slow {
+    animation-play-state: paused;
+  }
+
+  /* Lets the browser skip layout and paint for sections below the fold. */
+  .defer-render {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 420px;
+  }
+
+  /* Fades the logo wall out at both edges. */
+  .mask-edges {
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+
+  /* Faint blueprint grid over the purple, as in the reference. */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+    background-size: 148px 148px;
+  }
+}
+
+/* Scrollable strips (the phone nav capsule) that shouldn't show a bar. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Custom Sleek Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b0c10;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 94, 0, 0.35);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 94, 0, 0.55);
+}
+
+/* Respect the OS setting: no marquees, no transitions. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-marquee,
+  .animate-marquee-slow {
+    animation: none !important;
+  }
+}
+
+/* backdrop-filter is one of the most expensive effects on mobile GPUs, and the
+   phone layout does not depend on it. Keep the glass on desktop only. */
+@media (max-width: 767px) {
+  .backdrop-blur-xl,
+  .backdrop-blur-md,
+  .backdrop-blur-2xl {
+    backdrop-filter: none;
+  }
+}

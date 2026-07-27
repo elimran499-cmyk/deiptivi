@@ -1,0 +1,6 @@
+{
+  "name": "Deiptivi — deiptivi.com",
+  "description": "Deiptivi (deiptivi.com): IPTV dashboard for Netherlands and Belgium with live TV channels, program guide (EPG), M3U playlist manager, search, and trending VOD movies.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
