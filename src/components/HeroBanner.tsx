@@ -18,6 +18,17 @@ const LOGO_WALL = [
   { name: 'Eurosport', src: 'https://www.iptvtotaal.digital/assets/channels/eurosport.png' },
 ];
 
+// The marquee loops by translating -50%, so the first half has to be wider than
+// the viewport or the row runs dry and the loop shows a gap. Six tiles is only
+// ~1100px, so repeat the set until one half covers the widest screens, then
+// duplicate that half for the seam.
+const WALL_REPEAT = 3;
+const LOGO_WALL_LOOP = Array.from({ length: WALL_REPEAT * 2 }, () => LOGO_WALL).flat();
+
+// Keep the perceived speed constant now that the row travels much further:
+// ~25px/s over WALL_REPEAT copies of a ~1116px set.
+const WALL_DURATION = `${Math.round((WALL_REPEAT * 1116) / 25)}s`;
+
 interface HeroBannerProps {
   onGoToPackages: () => void;
 }
@@ -187,8 +198,11 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ onGoToPackages }) => {
         </div>
 
         <div ref={wallRef} className="mt-6 mask-edges overflow-hidden">
-          <div className="flex w-max animate-marquee items-center gap-4">
-            {[...LOGO_WALL, ...LOGO_WALL].map((logo, idx) => (
+          <div
+            className="flex w-max animate-marquee items-center gap-4"
+            style={{ animationDuration: WALL_DURATION }}
+          >
+            {LOGO_WALL_LOOP.map((logo, idx) => (
               <div
                 key={`${logo.name}-${idx}`}
                 className="w-[170px] h-[70px] shrink-0 rounded-2xl bg-white/70 hover:bg-white/90 flex items-center justify-center px-5 overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_28px_-6px_rgba(255,255,255,0.75)]"
